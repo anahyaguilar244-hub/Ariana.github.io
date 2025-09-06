@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Effect</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+<script>
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const fontSize = 20;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+// Inicializar gotas
+for (let i = 0; i < columns; i++) {
+  drops[i] = Math.random() * canvas.height;
+}
+
+function draw() {
+  // Fondo negro con transparencia para efecto de "desvanecer"
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#0F0';
+  ctx.font = fontSize + 'px monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random() * letters.length)];
+    ctx.fillText(text, i * fontSize, drops[i]);
+    drops[i] += fontSize;
+
+    if (drops[i] > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+  }
+}
+
+// Animar
+setInterval(draw, 50);
+
+// Ajustar canvas al cambiar tamaño de ventana
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
